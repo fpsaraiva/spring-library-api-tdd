@@ -1,13 +1,15 @@
 package dev.fpsaraiva.libraryapi.api.dto;
 
-public class BookDTO {
+import dev.fpsaraiva.libraryapi.entity.Book;
+
+public class BookDTOResponse {
 
     private Long id;
     private String title;
     private String author;
     private String isbn;
 
-    public BookDTO(Long id, String title, String author, String isbn) {
+    public BookDTOResponse(Long id, String title, String author, String isbn) {
         this.id = id;
         this.title = title;
         this.author = author;
@@ -29,4 +31,5 @@ public class BookDTO {
     public String getIsbn() {
         return isbn;
     }
+
 }
