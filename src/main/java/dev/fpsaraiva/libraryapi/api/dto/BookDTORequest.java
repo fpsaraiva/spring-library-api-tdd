@@ -2,12 +2,23 @@ package dev.fpsaraiva.libraryapi.api.dto;
 
 import dev.fpsaraiva.libraryapi.model.Book;
 
+import javax.validation.constraints.NotBlank;
+
 public class BookDTORequest {
 
     private Long id;
+
+    @NotBlank
     private String title;
+
+    @NotBlank
     private String author;
+
+    @NotBlank
     private String isbn;
+
+    public BookDTORequest() {
+    }
 
     public BookDTORequest(String author, String title, String isbn) {
         this.title = title;
