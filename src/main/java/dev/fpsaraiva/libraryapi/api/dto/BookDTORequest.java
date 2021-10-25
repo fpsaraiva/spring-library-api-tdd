@@ -1,6 +1,6 @@
 package dev.fpsaraiva.libraryapi.api.dto;
 
-import dev.fpsaraiva.libraryapi.entity.Book;
+import dev.fpsaraiva.libraryapi.model.Book;
 
 public class BookDTORequest {
 

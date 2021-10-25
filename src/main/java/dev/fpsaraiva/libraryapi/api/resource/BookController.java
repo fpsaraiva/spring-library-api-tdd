@@ -2,7 +2,7 @@ package dev.fpsaraiva.libraryapi.api.resource;
 
 import dev.fpsaraiva.libraryapi.api.dto.BookDTORequest;
 import dev.fpsaraiva.libraryapi.api.dto.BookDTOResponse;
-import dev.fpsaraiva.libraryapi.entity.Book;
+import dev.fpsaraiva.libraryapi.model.Book;
 import dev.fpsaraiva.libraryapi.service.BookService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

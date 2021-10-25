@@ -1,4 +1,4 @@
-package dev.fpsaraiva.libraryapi.entity;
+package dev.fpsaraiva.libraryapi.model;
 
 import java.util.Objects;
 

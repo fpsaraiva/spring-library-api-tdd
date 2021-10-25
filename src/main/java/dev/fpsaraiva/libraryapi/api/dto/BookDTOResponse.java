@@ -1,7 +1,5 @@
 package dev.fpsaraiva.libraryapi.api.dto;
 
-import dev.fpsaraiva.libraryapi.entity.Book;
-
 public class BookDTOResponse {
 
     private Long id;

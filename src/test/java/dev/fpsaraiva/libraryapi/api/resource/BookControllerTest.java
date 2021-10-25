@@ -2,7 +2,7 @@ package dev.fpsaraiva.libraryapi.api.resource;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.fpsaraiva.libraryapi.api.dto.BookDTORequest;
-import dev.fpsaraiva.libraryapi.entity.Book;
+import dev.fpsaraiva.libraryapi.model.Book;
 import dev.fpsaraiva.libraryapi.service.BookService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -58,7 +58,7 @@ public class BookControllerTest {
                 .perform(request)
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("id").isNotEmpty())
-                .andExpect(jsonPath("id").value(1L))
+                .andExpect(jsonPath("id").value(11L))
                 .andExpect(jsonPath("title").value(dto.getTitle()))
                 .andExpect(jsonPath("author").value(dto.getAuthor()))
                 .andExpect(jsonPath("isbn").value(dto.getIsbn()));
