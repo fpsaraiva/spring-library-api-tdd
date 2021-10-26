@@ -3,6 +3,7 @@ package dev.fpsaraiva.libraryapi.api.resource;
 import dev.fpsaraiva.libraryapi.api.dto.BookDTORequest;
 import dev.fpsaraiva.libraryapi.api.dto.BookDTOResponse;
 import dev.fpsaraiva.libraryapi.api.exceptions.ApiErrors;
+import dev.fpsaraiva.libraryapi.exception.BusinessException;
 import dev.fpsaraiva.libraryapi.model.Book;
 import dev.fpsaraiva.libraryapi.service.BookService;
 import org.springframework.http.HttpStatus;
@@ -36,5 +37,11 @@ public class BookController {
         BindingResult bindingResult = exception.getBindingResult();
 
         return new ApiErrors(bindingResult);
+    }
+
+    @ExceptionHandler(BusinessException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiErrors handleBusinessException(BusinessException ex) {
+        return new ApiErrors(ex);
     }
 }

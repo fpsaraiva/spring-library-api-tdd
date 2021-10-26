@@ -2,6 +2,7 @@ package dev.fpsaraiva.libraryapi.api.resource;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.fpsaraiva.libraryapi.api.dto.BookDTORequest;
+import dev.fpsaraiva.libraryapi.exception.BusinessException;
 import dev.fpsaraiva.libraryapi.model.Book;
 import dev.fpsaraiva.libraryapi.service.BookService;
 import org.junit.jupiter.api.DisplayName;
@@ -42,7 +43,7 @@ public class BookControllerTest {
     @DisplayName("Deve criar um livro com sucesso.")
     public void createBookTest() throws Exception {
         //cenario
-        BookDTORequest dto = new BookDTORequest( "Titulo do Livro", "Fernando", "5555");
+        BookDTORequest dto = createNewBook();
         Book savedBook = new Book(11L,"Titulo do Livro", "Fernando", "5555");
         BDDMockito.given(service.save(Mockito.any(Book.class))).willReturn(savedBook);
         String json = new ObjectMapper().writeValueAsString(dto);
@@ -65,6 +66,7 @@ public class BookControllerTest {
                 .andExpect(jsonPath("isbn").value(dto.getIsbn()));
     }
 
+    //validacao integridade
     @Test
     @DisplayName("Deve lançar erro de validação quando não houver dados suficientes para criar um livro.")
     public void createInvalidBookTest() throws Exception {
@@ -79,5 +81,30 @@ public class BookControllerTest {
         mvc.perform(request)
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("errors", hasSize(3)));
+    }
+
+    //validacao regra de negocio
+    @Test
+    @DisplayName("Deve lançar erro ao tentar cadastrar um livro com isbn já utilizado por outro.")
+    public void createBookWithDuplicatedIsbn() throws Exception {
+        BookDTORequest dto = createNewBook();
+        String json = new ObjectMapper().writeValueAsString(dto);
+        String mensagemErro = "Isbn já cadastrado";
+        BDDMockito.given(service.save(Mockito.any(Book.class))).willThrow(new BusinessException(mensagemErro));
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .post(BOOK_API)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(json);
+
+        mvc.perform(request)
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("errors", hasSize(1)))
+                .andExpect(jsonPath("errors[0]").value(mensagemErro));
+    }
+
+    private BookDTORequest createNewBook() {
+        return new BookDTORequest( "Titulo do Livro", "Fernando", "5555");
     }
 }
