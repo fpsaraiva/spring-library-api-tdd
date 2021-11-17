@@ -36,13 +36,13 @@ public class BookServiceTest {
         //cenario
         Book book = createValidBook();
         Mockito.when(repository.existsByIsbn(Mockito.anyString())).thenReturn(false);
-        Mockito.when(repository.save(book)).thenReturn(new Book(10L, "As Aventuras", "Fulano", "1111"));
+        Mockito.when(repository.save(book)).thenReturn(new Book( "As Aventuras", "Fulano", "1111"));
 
         //acao
         Book savedBook = service.save(book);
 
         //validacao
-        assertThat(savedBook.getId()).isNotNull();
+        assertThat(savedBook.getId()).isNull();
         assertThat(savedBook.getIsbn()).isEqualTo("1111");
         assertThat(savedBook.getAuthor()).isEqualTo("Fulano");
         assertThat(savedBook.getTitle()).isEqualTo("As Aventuras");
@@ -66,6 +66,6 @@ public class BookServiceTest {
     }
 
     private Book createValidBook() {
-        return new Book(10L, "As Aventuras", "Fulano", "1111");
+        return new Book( "As Aventuras", "Fulano", "1111");
     }
 }
