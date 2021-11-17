@@ -39,6 +39,6 @@ public class BookDTORequest {
     }
 
     public Book toEntity() {
-        return new Book(id, author, title, isbn);
+        return new Book(author, title, isbn);
     }
 }

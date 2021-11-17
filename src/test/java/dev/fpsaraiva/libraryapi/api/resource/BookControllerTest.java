@@ -44,7 +44,7 @@ public class BookControllerTest {
     public void createBookTest() throws Exception {
         //cenario
         BookDTORequest dto = createNewBook();
-        Book savedBook = new Book(11L,"Titulo do Livro", "Fernando", "5555");
+        Book savedBook = new Book("Titulo do Livro", "Fernando", "5555");
         BDDMockito.given(service.save(Mockito.any(Book.class))).willReturn(savedBook);
         String json = new ObjectMapper().writeValueAsString(dto);
 
@@ -59,8 +59,7 @@ public class BookControllerTest {
         mvc
                 .perform(request)
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("id").isNotEmpty())
-                .andExpect(jsonPath("id").value(11L))
+                .andExpect(jsonPath("id").isEmpty())
                 .andExpect(jsonPath("title").value(dto.getTitle()))
                 .andExpect(jsonPath("author").value(dto.getAuthor()))
                 .andExpect(jsonPath("isbn").value(dto.getIsbn()));

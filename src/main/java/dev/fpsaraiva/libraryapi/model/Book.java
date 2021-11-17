@@ -1,9 +1,13 @@
 package dev.fpsaraiva.libraryapi.model;
 
+import javax.persistence.*;
 import java.util.Objects;
 
+@Entity
 public class Book {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String title;
@@ -12,7 +16,7 @@ public class Book {
 
     private String isbn;
 
-    public Book(Long id, String title, String author, String isbn) {
+    public Book(String title, String author, String isbn) {
         this.id = id;
         this.title = title;
         this.author = author;
