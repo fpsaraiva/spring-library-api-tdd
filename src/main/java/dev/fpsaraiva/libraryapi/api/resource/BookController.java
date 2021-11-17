@@ -10,8 +10,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/books")
@@ -28,7 +30,17 @@ public class BookController {
     public BookDTOResponse create(@RequestBody @Valid BookDTORequest dto) {
         Book entity = dto.toEntity();
         entity = service.save(entity);
-        return new BookDTOResponse(entity.getId(), entity.getAuthor(), entity.getTitle(), entity.getIsbn());
+        return new BookDTOResponse(entity.getId(), entity.getTitle(), entity.getAuthor(), entity.getIsbn());
+    }
+
+    @GetMapping("/{id}")
+    public BookDTOResponse get(@PathVariable Long id) {
+        try {
+            Book entity = service.getById(id).get();
+            return new BookDTOResponse(entity.getId(), entity.getTitle(), entity.getAuthor(), entity.getIsbn());
+        } catch (NoSuchElementException ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
