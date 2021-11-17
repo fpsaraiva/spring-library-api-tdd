@@ -23,6 +23,14 @@ public class Book {
         this.isbn = isbn;
     }
 
+    //construtor secundário, utilizado para testes
+    public Book(Long id, String title, String author, String isbn) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
+    }
+
     public Long getId() {
         return id;
     }

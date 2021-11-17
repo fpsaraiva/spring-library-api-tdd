@@ -28,7 +28,13 @@ public class BookController {
     public BookDTOResponse create(@RequestBody @Valid BookDTORequest dto) {
         Book entity = dto.toEntity();
         entity = service.save(entity);
-        return new BookDTOResponse(entity.getId(), entity.getAuthor(), entity.getTitle(), entity.getIsbn());
+        return new BookDTOResponse(entity.getId(), entity.getTitle(), entity.getAuthor(), entity.getIsbn());
+    }
+
+    @GetMapping("/{id}")
+    public BookDTOResponse get(@PathVariable Long id) {
+        Book entity = service.getById(id).get();
+        return new BookDTOResponse(entity.getId(), entity.getTitle(), entity.getAuthor(), entity.getIsbn());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
