@@ -31,6 +31,11 @@ public class Book {
         this.isbn = isbn;
     }
 
+    //setter utilizado no BookServiceTest
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Long getId() {
         return id;
     }
