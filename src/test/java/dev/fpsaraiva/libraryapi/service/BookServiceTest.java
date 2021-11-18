@@ -17,6 +17,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
@@ -95,6 +97,28 @@ public class BookServiceTest {
         Optional<Book> book = service.getById(id);
 
         assertThat(book.isPresent()).isFalse();
+    }
+
+    @Test
+    @DisplayName("Deve deletar um livro")
+    public void deleteBookTest() {
+        Long id = 1l;
+        Book book = createValidBook();
+        book.setId(id);
+
+        assertDoesNotThrow( () -> service.delete(book));
+
+        Mockito.verify(repository, Mockito.times(1)).delete(book);
+    }
+
+    @Test
+    @DisplayName("Deve ocorrer erro ao tentar deletar um livro existente")
+    public void deleteInvalidBookTest() {
+        Book book = new Book();
+
+        assertThrows(IllegalArgumentException.class, () -> service.delete(book));
+
+        Mockito.verify(repository, Mockito.never()).delete(book);
     }
 
     private Book createValidBook() {
