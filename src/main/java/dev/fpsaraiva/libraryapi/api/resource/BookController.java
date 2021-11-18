@@ -54,6 +54,19 @@ public class BookController {
         }
     }
 
+    @PutMapping("/{id}")
+    public BookDTOResponse update(@PathVariable Long id, BookDTORequest dto) {
+        try {
+            Book entity = service.getById(id).get();
+            entity.setTitle(dto.getTitle());
+            entity.setAuthor(dto.getAuthor());
+            entity = service.update(entity);
+            return new BookDTOResponse(entity.getId(), entity.getTitle(), entity.getAuthor(), entity.getIsbn());
+        } catch (NoSuchElementException ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiErrors handleValidationExceptions(MethodArgumentNotValidException exception) {
