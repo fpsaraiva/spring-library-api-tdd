@@ -27,17 +27,22 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Optional<Book> getById(Long id) {
-        return Optional.empty();
+        return repository.findById(id);
     }
 
     @Override
     public void delete(Book book) {
-
+        if(book == null || book.getId() == null) {
+            throw new IllegalArgumentException("Livro não pode ser/possuir ID nulo.");
+        }
+        repository.delete(book);
     }
 
     @Override
     public Book update(Book book) {
-        return null;
-        //return repository.save(book);
+        if(book == null || book.getId() == null) {
+            throw new IllegalArgumentException("Livro não pode ser/possuir ID nulo.");
+        }
+        return repository.save(book);
     }
 }

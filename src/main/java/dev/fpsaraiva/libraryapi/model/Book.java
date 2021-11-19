@@ -16,6 +16,12 @@ public class Book {
 
     private String isbn;
 
+    //construtor usado em teste do método DELETE, classe BookServiceTest
+    @Deprecated
+    public Book() {
+
+    }
+
     public Book(String title, String author, String isbn) {
         this.id = id;
         this.title = title;
@@ -29,6 +35,11 @@ public class Book {
         this.title = title;
         this.author = author;
         this.isbn = isbn;
+    }
+
+    //setter utilizado no BookServiceTest
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getId() {
