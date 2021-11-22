@@ -4,6 +4,10 @@ import dev.fpsaraiva.libraryapi.exception.BusinessException;
 import dev.fpsaraiva.libraryapi.model.Book;
 import dev.fpsaraiva.libraryapi.model.repository.BookRepository;
 import dev.fpsaraiva.libraryapi.service.BookService;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -44,5 +48,17 @@ public class BookServiceImpl implements BookService {
             throw new IllegalArgumentException("Livro não pode ser/possuir ID nulo.");
         }
         return repository.save(book);
+    }
+
+    @Override
+    public Page<Book> find(Book filter, Pageable pageRequest) {
+        Example<Book> example = Example.of(filter,
+                ExampleMatcher
+                        .matching()
+                        .withIgnoreCase()
+                        .withIgnoreNullValues()
+                        .withStringMatcher(ExampleMatcher.StringMatcher.STARTING)
+        );
+        return repository.findAll(example, pageRequest);
     }
 }
