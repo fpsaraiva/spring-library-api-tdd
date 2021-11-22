@@ -31,4 +31,7 @@ public class Loan {
         this.returned = returned;
     }
 
+    public Long getId() {
+        return id;
+    }
 }

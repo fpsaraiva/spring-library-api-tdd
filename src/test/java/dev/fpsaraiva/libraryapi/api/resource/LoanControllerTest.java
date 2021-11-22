@@ -25,8 +25,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.time.LocalDate;
 import java.util.Optional;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
@@ -49,7 +48,7 @@ public class LoanControllerTest {
     @DisplayName("Deve realizar um empréstimo")
     public void createLoanTest() throws Exception {
 
-        LoanDTO dto = new LoanDTO("Fulano", "123");
+        LoanDTO dto = new LoanDTO("123", "Fulano");
         String json = new ObjectMapper().writeValueAsString(dto);
 
         Book book = new Book(1l, "123");
@@ -64,7 +63,7 @@ public class LoanControllerTest {
 
         mvc.perform(request)
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("id").value(1l));
+                .andExpect(content().string("1"));
 
     }
 }
