@@ -2,8 +2,8 @@ package dev.fpsaraiva.libraryapi.service;
 
 import dev.fpsaraiva.libraryapi.model.Book;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.awt.print.Pageable;
 import java.util.Optional;
 
 public interface BookService {

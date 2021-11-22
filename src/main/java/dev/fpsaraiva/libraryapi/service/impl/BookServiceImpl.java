@@ -5,9 +5,9 @@ import dev.fpsaraiva.libraryapi.model.Book;
 import dev.fpsaraiva.libraryapi.model.repository.BookRepository;
 import dev.fpsaraiva.libraryapi.service.BookService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Pageable;
 import java.util.Optional;
 
 @Service
