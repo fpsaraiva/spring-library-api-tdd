@@ -4,7 +4,7 @@ import dev.fpsaraiva.libraryapi.api.dto.BookDTORequest;
 import dev.fpsaraiva.libraryapi.api.dto.BookDTOResponse;
 import dev.fpsaraiva.libraryapi.api.exceptions.ApiErrors;
 import dev.fpsaraiva.libraryapi.exception.BusinessException;
-import dev.fpsaraiva.libraryapi.model.Book;
+import dev.fpsaraiva.libraryapi.model.entity.Book;
 import dev.fpsaraiva.libraryapi.service.BookService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;

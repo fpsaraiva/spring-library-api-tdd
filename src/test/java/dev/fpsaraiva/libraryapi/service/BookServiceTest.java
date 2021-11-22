@@ -1,7 +1,7 @@
 package dev.fpsaraiva.libraryapi.service;
 
 import dev.fpsaraiva.libraryapi.exception.BusinessException;
-import dev.fpsaraiva.libraryapi.model.Book;
+import dev.fpsaraiva.libraryapi.model.entity.Book;
 import dev.fpsaraiva.libraryapi.model.repository.BookRepository;
 import dev.fpsaraiva.libraryapi.service.impl.BookServiceImpl;
 import org.assertj.core.api.Assertions;

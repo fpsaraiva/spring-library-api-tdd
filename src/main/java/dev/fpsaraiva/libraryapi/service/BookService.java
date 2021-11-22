@@ -1,6 +1,6 @@
 package dev.fpsaraiva.libraryapi.service;
 
-import dev.fpsaraiva.libraryapi.model.Book;
+import dev.fpsaraiva.libraryapi.model.entity.Book;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -16,4 +16,6 @@ public interface BookService {
     Book update(Book book);
 
     Page<Book> find(Book filter, Pageable pageRequest);
+
+    Optional<Book> getBookByIsbn(String isbn);
 }

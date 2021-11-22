@@ -1,7 +1,7 @@
 package dev.fpsaraiva.libraryapi.service.impl;
 
 import dev.fpsaraiva.libraryapi.exception.BusinessException;
-import dev.fpsaraiva.libraryapi.model.Book;
+import dev.fpsaraiva.libraryapi.model.entity.Book;
 import dev.fpsaraiva.libraryapi.model.repository.BookRepository;
 import dev.fpsaraiva.libraryapi.service.BookService;
 import org.springframework.data.domain.Example;
@@ -60,5 +60,10 @@ public class BookServiceImpl implements BookService {
                         .withStringMatcher(ExampleMatcher.StringMatcher.STARTING)
         );
         return repository.findAll(example, pageRequest);
+    }
+
+    @Override
+    public Optional<Book> getBookByIsbn(String isbn) {
+        return null;
     }
 }
