@@ -91,7 +91,7 @@ public class LoanControllerTest {
     }
 
     @Test
-    @DisplayName("Deve retornar erro ao tentar fazer empréstimo de um livro inexistente")
+    @DisplayName("Deve retornar erro ao tentar fazer empréstimo de um livro já emprestado")
     public void loanedBookErrorOnCreateLoanTest() throws Exception {
 
         LoanDTO dto = new LoanDTO("123", "Fulano");
@@ -111,6 +111,5 @@ public class LoanControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("errors", Matchers.hasSize(1)))
                 .andExpect(jsonPath("errors[0]").value("Book already loaned."));
-
     }
 }
