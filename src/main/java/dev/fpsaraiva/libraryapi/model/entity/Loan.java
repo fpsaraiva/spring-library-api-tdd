@@ -34,4 +34,16 @@ public class Loan {
     public Long getId() {
         return id;
     }
+
+    public String getCustomer() {
+        return customer;
+    }
+
+    public Book getBook() {
+        return book;
+    }
+
+    public LocalDate getLoanDate() {
+        return loanDate;
+    }
 }
