@@ -54,4 +54,7 @@ public class Loan {
     public LocalDate getLoanDate() {
         return loanDate;
     }
+
+    public void setReturned(boolean returned) {
+    }
 }

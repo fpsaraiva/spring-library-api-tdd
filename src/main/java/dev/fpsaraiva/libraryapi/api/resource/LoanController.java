@@ -1,6 +1,7 @@
 package dev.fpsaraiva.libraryapi.api.resource;
 
 import dev.fpsaraiva.libraryapi.api.dto.LoanDTO;
+import dev.fpsaraiva.libraryapi.api.dto.ReturnedLoanDTO;
 import dev.fpsaraiva.libraryapi.model.entity.Book;
 import dev.fpsaraiva.libraryapi.model.entity.Loan;
 import dev.fpsaraiva.libraryapi.service.BookService;
@@ -34,5 +35,14 @@ public class LoanController {
         entity = service.save(entity);
 
         return entity.getId();
+    }
+
+    @PatchMapping("/{id}")
+    public void returnBook(@PathVariable Long id, @RequestBody ReturnedLoanDTO dto) {
+        Loan loan = service.getById(id).get();
+
+        loan.setReturned(dto.getReturned());
+
+        service.update(loan);
     }
 }

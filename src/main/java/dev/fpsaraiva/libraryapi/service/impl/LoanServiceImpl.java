@@ -5,6 +5,8 @@ import dev.fpsaraiva.libraryapi.model.entity.Loan;
 import dev.fpsaraiva.libraryapi.model.repository.LoanRepository;
 import dev.fpsaraiva.libraryapi.service.LoanService;
 
+import java.util.Optional;
+
 public class LoanServiceImpl implements LoanService {
 
     private LoanRepository repository;
@@ -19,5 +21,15 @@ public class LoanServiceImpl implements LoanService {
             throw new BusinessException("Book already loaned.");
         }
         return repository.save(loan);
+    }
+
+    @Override
+    public Optional<Loan> getById(Long id) {
+        return repository.findById(id);
+    }
+
+    @Override
+    public Loan update(Loan loan) {
+        return null;
     }
 }
