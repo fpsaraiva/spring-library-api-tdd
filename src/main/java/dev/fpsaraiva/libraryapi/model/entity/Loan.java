@@ -23,6 +23,12 @@ public class Loan {
 
     public Loan() {}
 
+    //usado para LoanControllerTest
+    public Loan(String customer, Book book) {
+        this.customer = customer;
+        this.book = book;
+    }
+
     //usado para LoanRepositoryTest
     public Loan(String customer, Book book, LocalDate loanDate, boolean returned) {
         this.customer = customer;
