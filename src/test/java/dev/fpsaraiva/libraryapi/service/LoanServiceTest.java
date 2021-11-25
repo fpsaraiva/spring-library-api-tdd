@@ -14,6 +14,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -66,5 +67,45 @@ public class LoanServiceTest {
 
         assertThat(exception).isInstanceOf(BusinessException.class).hasMessage("Book already loaned.");
         verify(repository, never()).save(savingLoan);
+    }
+
+    @Test
+    @DisplayName("Deve obter as informações de um empréstimo pelo ID")
+    public void getLoanDetailsTest() {
+
+        //cenario
+        Loan loan = createLoan();
+        Long id = loan.getId();
+        when(repository.findById(id)).thenReturn(Optional.of(loan));
+
+        //acao
+        Optional<Loan> result = service.getById(id);
+
+        //validacao
+        assertThat(result.isPresent()).isTrue();
+        assertThat(result.get().getId()).isEqualTo(id);
+        assertThat(result.get().getCustomer()).isEqualTo(loan.getCustomer());
+        assertThat(result.get().getBook()).isEqualTo(loan.getBook());
+        assertThat(result.get().getLoanDate()).isEqualTo(loan.getLoanDate());
+
+        verify(repository).findById(id);
+    }
+
+
+    @Test
+    @DisplayName("Deve retornar vazio ao obter um empréstimo por id quando ele não existe")
+    public void loanNotFoundByIdTest() {
+        Long id = 1l;
+
+        when(repository.findById(id)).thenReturn(Optional.empty());
+
+        Optional<Loan> loan = service.getById(id);
+
+        assertThat(loan.isPresent()).isFalse();
+    }
+
+    public Loan createLoan() {
+        Book book = new Book(1l, "123");
+        return new Loan(1l, "Fulano", book, LocalDate.now(), true);
     }
 }
