@@ -30,6 +30,9 @@ public class LoanServiceImpl implements LoanService {
 
     @Override
     public Loan update(Loan loan) {
-        return null;
+        if(loan == null || loan.getId() == null) {
+            throw new IllegalArgumentException("Empréstimo não pode ser/possuir ID nulo.");
+        }
+        return repository.save(loan);
     }
 }

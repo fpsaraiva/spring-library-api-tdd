@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
@@ -149,7 +149,7 @@ public class BookServiceTest {
     }
 
     @Test
-    @DisplayName("Deve ocorrer erro ao tentar atualizar um livro existente")
+    @DisplayName("Deve ocorrer erro ao tentar atualizar um livro inexistente")
     public void updateInvalidBookTest() {
         Book book = new Book();
 

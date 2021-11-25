@@ -55,6 +55,11 @@ public class Loan {
         return loanDate;
     }
 
+    public boolean getReturned() {
+        return returned;
+    }
+
     public void setReturned(boolean returned) {
+        this.returned = returned;
     }
 }

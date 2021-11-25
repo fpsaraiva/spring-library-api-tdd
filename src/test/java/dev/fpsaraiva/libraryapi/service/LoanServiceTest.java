@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -18,6 +19,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
@@ -91,7 +93,6 @@ public class LoanServiceTest {
         verify(repository).findById(id);
     }
 
-
     @Test
     @DisplayName("Deve retornar vazio ao obter um empréstimo por id quando ele não existe")
     public void loanNotFoundByIdTest() {
@@ -102,6 +103,31 @@ public class LoanServiceTest {
         Optional<Loan> loan = service.getById(id);
 
         assertThat(loan.isPresent()).isFalse();
+    }
+
+    @Test
+    @DisplayName("Deve atualizar um empréstimo")
+    public void updateLoanTest() {
+        Loan loan = createLoan();
+        Long id = loan.getId();
+        loan.setReturned(true);;
+
+        when(repository.save(loan)).thenReturn(loan);
+
+        Loan updatedLoan = service.update(loan);
+
+        assertThat(updatedLoan.getReturned()).isTrue();
+        verify(repository).save(loan);
+    }
+
+    @Test
+    @DisplayName("Deve ocorrer erro ao tentar atualizar um empréstimo inexistente")
+    public void updateInvalidLoanTest() {
+        Loan loan = new Loan();
+
+        assertThrows(IllegalArgumentException.class, () -> service.update(loan));
+
+        Mockito.verify(repository, Mockito.never()).save(loan);
     }
 
     public Loan createLoan() {
