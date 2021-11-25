@@ -2,12 +2,14 @@ package dev.fpsaraiva.libraryapi.api.resource;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.fpsaraiva.libraryapi.api.dto.LoanDTO;
+import dev.fpsaraiva.libraryapi.api.dto.LoanFilterDTO;
 import dev.fpsaraiva.libraryapi.api.dto.ReturnedLoanDTO;
 import dev.fpsaraiva.libraryapi.exception.BusinessException;
 import dev.fpsaraiva.libraryapi.model.entity.Book;
 import dev.fpsaraiva.libraryapi.model.entity.Loan;
 import dev.fpsaraiva.libraryapi.service.BookService;
 import dev.fpsaraiva.libraryapi.service.LoanService;
+import dev.fpsaraiva.libraryapi.service.LoanServiceTest;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,6 +20,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -26,6 +31,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Optional;
 
 import static org.mockito.Mockito.verify;
@@ -155,5 +161,30 @@ public class LoanControllerTest {
 
         mvc.perform(request)
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("Deve filtrar empréstimos")
+    public void findLoansTest() throws Exception {
+        Long id = 1l;
+        Loan loan = LoanServiceTest.createLoan();
+
+        BDDMockito.given(loanService.find(Mockito.any(LoanFilterDTO.class), Mockito.any(Pageable.class)))
+                .willReturn(new PageImpl<Loan>(Arrays.asList(loan), PageRequest.of(0, 10), 1));
+
+        String queryString = String.format("?isbn=%s&customer=%s&page=0&size=100",
+                loan.getBook().getIsbn(), loan.getCustomer());
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .get(LOAN_API.concat(queryString))
+                .accept(MediaType.APPLICATION_JSON);
+
+        mvc
+                .perform(request)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("content", Matchers.hasSize(1)))
+                .andExpect(jsonPath("totalElements").value(1))
+                .andExpect(jsonPath("pageable.pageSize").value(10))
+                .andExpect(jsonPath("pageable.pageNumber").value(0));
     }
 }

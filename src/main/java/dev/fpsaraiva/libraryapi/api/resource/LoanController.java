@@ -1,11 +1,14 @@
 package dev.fpsaraiva.libraryapi.api.resource;
 
 import dev.fpsaraiva.libraryapi.api.dto.LoanDTO;
+import dev.fpsaraiva.libraryapi.api.dto.LoanFilterDTO;
 import dev.fpsaraiva.libraryapi.api.dto.ReturnedLoanDTO;
 import dev.fpsaraiva.libraryapi.model.entity.Book;
 import dev.fpsaraiva.libraryapi.model.entity.Loan;
 import dev.fpsaraiva.libraryapi.service.BookService;
 import dev.fpsaraiva.libraryapi.service.LoanService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -45,5 +48,11 @@ public class LoanController {
         loan.setReturned(dto.getReturned());
 
         service.update(loan);
+    }
+
+    @GetMapping
+    public Page<LoanDTO> find(LoanFilterDTO dto, Pageable pageRequest) {
+        Page<Loan> result = service.find(dto, pageRequest);
+        return null;
     }
 }

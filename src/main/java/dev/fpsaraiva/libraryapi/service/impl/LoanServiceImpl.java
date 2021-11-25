@@ -1,9 +1,12 @@
 package dev.fpsaraiva.libraryapi.service.impl;
 
+import dev.fpsaraiva.libraryapi.api.dto.LoanFilterDTO;
 import dev.fpsaraiva.libraryapi.exception.BusinessException;
 import dev.fpsaraiva.libraryapi.model.entity.Loan;
 import dev.fpsaraiva.libraryapi.model.repository.LoanRepository;
 import dev.fpsaraiva.libraryapi.service.LoanService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
@@ -34,5 +37,10 @@ public class LoanServiceImpl implements LoanService {
             throw new IllegalArgumentException("Empréstimo não pode ser/possuir ID nulo.");
         }
         return repository.save(loan);
+    }
+
+    @Override
+    public Page<Loan> find(LoanFilterDTO filter, Pageable pageRequest) {
+        return null;
     }
 }

@@ -130,7 +130,7 @@ public class LoanServiceTest {
         Mockito.verify(repository, Mockito.never()).save(loan);
     }
 
-    public Loan createLoan() {
+    public static Loan createLoan() {
         Book book = new Book(1l, "123");
         return new Loan(1l, "Fulano", book, LocalDate.now(), true);
     }
