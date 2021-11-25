@@ -1,9 +1,6 @@
 package dev.fpsaraiva.libraryapi.model.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
@@ -13,8 +10,11 @@ public class Loan {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(length = 100)
     private String customer;
 
+    @JoinColumn(name = "id_book")
+    @ManyToOne
     private Book book;
 
     private LocalDate loanDate;
@@ -22,6 +22,14 @@ public class Loan {
     private boolean returned;
 
     public Loan() {}
+
+    //usado para LoanRepositoryTest
+    public Loan(String customer, Book book, LocalDate loanDate, boolean returned) {
+        this.customer = customer;
+        this.book = book;
+        this.loanDate = loanDate;
+        this.returned = returned;
+    }
 
     public Loan(Long id, String customer, Book book, LocalDate loanDate, boolean returned) {
         this.id = id;
