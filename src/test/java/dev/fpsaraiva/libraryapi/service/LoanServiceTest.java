@@ -1,5 +1,6 @@
 package dev.fpsaraiva.libraryapi.service;
 
+import dev.fpsaraiva.libraryapi.api.dto.LoanFilterDTO;
 import dev.fpsaraiva.libraryapi.exception.BusinessException;
 import dev.fpsaraiva.libraryapi.model.entity.Book;
 import dev.fpsaraiva.libraryapi.model.entity.Loan;
@@ -11,10 +12,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -128,6 +134,32 @@ public class LoanServiceTest {
         assertThrows(IllegalArgumentException.class, () -> service.update(loan));
 
         Mockito.verify(repository, Mockito.never()).save(loan);
+    }
+
+    @Test
+    @DisplayName("Deve filtrar empréstimos pelas propriedades")
+    public void findLoanTest() {
+        LoanFilterDTO loanFilterDTO = new LoanFilterDTO("123", "Fulano");
+
+        Loan loan = createLoan();
+
+        PageRequest pageRequest = PageRequest.of(0, 10);
+        List<Loan> lista = Arrays.asList(loan);
+
+        Page<Loan> page = new PageImpl<>(lista, pageRequest, lista.size());
+        when(repository.findByBookIsbnOrCustomer(
+                Mockito.anyString(),
+                Mockito.anyString(),
+                Mockito.any(PageRequest.class))
+        )
+                .thenReturn(page);
+
+        Page<Loan> result = service.find(loanFilterDTO, pageRequest);
+
+        assertThat(result.getTotalElements()).isEqualTo(1);
+        assertThat(result.getContent()).isEqualTo(lista);
+        assertThat(result.getPageable().getPageNumber()).isEqualTo(0);
+        assertThat(result.getPageable().getPageSize()).isEqualTo(10);
     }
 
     public static Loan createLoan() {

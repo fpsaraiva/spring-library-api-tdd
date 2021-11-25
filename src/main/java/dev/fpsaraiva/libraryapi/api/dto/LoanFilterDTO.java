@@ -10,6 +10,12 @@ public class LoanFilterDTO {
     public LoanFilterDTO() {
     }
 
+    //Usado em LoanServiceTest
+    public LoanFilterDTO(String isbn, String customer) {
+        this.isbn = isbn;
+        this.customer = customer;
+    }
+
     public LoanFilterDTO(Long id, String isbn, String customer, BookDTOResponse book) {
         this.id = id;
         this.isbn = isbn;
