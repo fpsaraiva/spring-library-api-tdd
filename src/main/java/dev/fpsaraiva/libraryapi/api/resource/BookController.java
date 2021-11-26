@@ -2,8 +2,11 @@ package dev.fpsaraiva.libraryapi.api.resource;
 
 import dev.fpsaraiva.libraryapi.api.dto.BookDTORequest;
 import dev.fpsaraiva.libraryapi.api.dto.BookDTOResponse;
+import dev.fpsaraiva.libraryapi.api.dto.LoanDTO;
 import dev.fpsaraiva.libraryapi.model.entity.Book;
+import dev.fpsaraiva.libraryapi.model.entity.Loan;
 import dev.fpsaraiva.libraryapi.service.BookService;
+import dev.fpsaraiva.libraryapi.service.LoanService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -20,10 +23,13 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/books")
 public class BookController {
 
-    private BookService service;
+    private final BookService service;
 
-    public BookController(BookService service) {
+    private final LoanService loanService;
+
+    public BookController(BookService service, LoanService loanService) {
         this.service = service;
+        this.loanService = loanService;
     }
 
     @PostMapping
@@ -69,13 +75,29 @@ public class BookController {
     }
 
     @GetMapping
-    public Page<BookDTOResponse> find(BookDTOResponse dto, Pageable pageRequest) {
+    public Page<BookDTOResponse> find(BookDTOResponse dto, Pageable pageable) {
         Book filter = new Book(dto.getId(), dto.getTitle(), dto.getAuthor(), dto.getIsbn());
-        Page<Book> result = service.find(filter, pageRequest);
+        Page<Book> result = service.find(filter, pageable);
         List<BookDTOResponse> list = result.getContent().stream()
                 .map(entity -> new BookDTOResponse(entity.getId(), entity.getTitle(), entity.getAuthor(), entity.getIsbn()))
                 .collect(Collectors.toList());
-        return new PageImpl<BookDTOResponse>(list, pageRequest, result.getTotalElements());
+        return new PageImpl<BookDTOResponse>(list, pageable, result.getTotalElements());
     }
 
+    @GetMapping("/{id}/loans")
+    public Page<LoanDTO> loansByBook(@PathVariable Long id, Pageable pageable) {
+        Book book = service.getById(id).orElseThrow( () ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND));
+        Page<Loan> result = loanService.getLoansByBook(book, pageable);
+        List<LoanDTO> list = result.getContent()
+                .stream()
+                .map(loan -> {
+                    Book loanBook = loan.getBook();
+                    BookDTOResponse bookDTO = new BookDTOResponse(loanBook.getId(), loanBook.getTitle(), loanBook.getAuthor(), loanBook.getIsbn());
+                    return new LoanDTO(loanBook.getIsbn(), loan.getCustomer(), bookDTO);
+                })
+                .collect(Collectors.toList());
+
+        return new PageImpl<LoanDTO>(list, pageable, result.getTotalElements());
+    }
 }

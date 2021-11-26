@@ -5,6 +5,7 @@ import dev.fpsaraiva.libraryapi.api.dto.BookDTORequest;
 import dev.fpsaraiva.libraryapi.exception.BusinessException;
 import dev.fpsaraiva.libraryapi.model.entity.Book;
 import dev.fpsaraiva.libraryapi.service.BookService;
+import dev.fpsaraiva.libraryapi.service.LoanService;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -44,7 +45,10 @@ public class BookControllerTest {
     MockMvc mvc;
 
     @MockBean
-    BookService service;
+    private BookService service;
+
+    @MockBean
+    private LoanService loanService;
 
     @Test
     @DisplayName("Deve criar um livro com sucesso.")

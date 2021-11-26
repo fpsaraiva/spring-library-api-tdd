@@ -1,7 +1,7 @@
 package dev.fpsaraiva.libraryapi.model.entity;
 
 import javax.persistence.*;
-import java.util.Objects;
+import java.util.List;
 
 @Entity
 public class Book {
@@ -9,12 +9,12 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String title;
-
     private String author;
-
     private String isbn;
+
+    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
+    private List<Loan> loans;
 
     //construtor usado em teste do método DELETE, classe BookServiceTest
     @Deprecated
@@ -69,28 +69,5 @@ public class Book {
 
     public String getIsbn() {
         return isbn;
-    }
-
-    @Override
-    public String toString() {
-        return "Book{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", author='" + author + '\'' +
-                ", isbn='" + isbn + '\'' +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Book book = (Book) o;
-        return Objects.equals(id, book.id) && Objects.equals(title, book.title) && Objects.equals(author, book.author) && Objects.equals(isbn, book.isbn);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, title, author, isbn);
     }
 }

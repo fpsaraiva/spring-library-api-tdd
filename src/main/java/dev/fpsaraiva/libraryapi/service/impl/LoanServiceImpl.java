@@ -2,6 +2,7 @@ package dev.fpsaraiva.libraryapi.service.impl;
 
 import dev.fpsaraiva.libraryapi.api.dto.LoanFilterDTO;
 import dev.fpsaraiva.libraryapi.exception.BusinessException;
+import dev.fpsaraiva.libraryapi.model.entity.Book;
 import dev.fpsaraiva.libraryapi.model.entity.Loan;
 import dev.fpsaraiva.libraryapi.model.repository.LoanRepository;
 import dev.fpsaraiva.libraryapi.service.LoanService;
@@ -42,5 +43,10 @@ public class LoanServiceImpl implements LoanService {
     @Override
     public Page<Loan> find(LoanFilterDTO filter, Pageable pageable) {
         return repository.findByBookIsbnOrCustomer(filter.getIsbn(), filter.getCustomer(), pageable);
+    }
+
+    @Override
+    public Page<Loan> getLoansByBook(Book book, Pageable pageable) {
+        return repository.findByBook(book, pageable);
     }
 }
