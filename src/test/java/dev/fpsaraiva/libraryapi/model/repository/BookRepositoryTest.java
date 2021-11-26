@@ -1,6 +1,6 @@
 package dev.fpsaraiva.libraryapi.model.repository;
 
-import dev.fpsaraiva.libraryapi.model.Book;
+import dev.fpsaraiva.libraryapi.model.entity.Book;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,7 +40,7 @@ public class BookRepositoryTest {
         assertThat(exists).isTrue();
     }
 
-    private Book createNewBook(String isbn) {
+    public static Book createNewBook(String isbn) {
         return new Book("As Aventuras", "Fulano", isbn);
     }
 

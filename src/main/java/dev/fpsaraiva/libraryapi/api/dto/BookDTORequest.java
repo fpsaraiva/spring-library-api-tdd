@@ -1,6 +1,6 @@
 package dev.fpsaraiva.libraryapi.api.dto;
 
-import dev.fpsaraiva.libraryapi.model.Book;
+import dev.fpsaraiva.libraryapi.model.entity.Book;
 
 import javax.validation.constraints.NotBlank;
 

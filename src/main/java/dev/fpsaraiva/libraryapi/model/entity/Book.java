@@ -1,4 +1,4 @@
-package dev.fpsaraiva.libraryapi.model;
+package dev.fpsaraiva.libraryapi.model.entity;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -18,9 +18,7 @@ public class Book {
 
     //construtor usado em teste do método DELETE, classe BookServiceTest
     @Deprecated
-    public Book() {
-
-    }
+    public Book() {}
 
     public Book(String title, String author, String isbn) {
         this.id = id;
@@ -34,6 +32,12 @@ public class Book {
         this.id = id;
         this.title = title;
         this.author = author;
+        this.isbn = isbn;
+    }
+
+    //construtor utilizado para testes de emprésitmos
+    public Book(Long id, String isbn) {
+        this.id = id;
         this.isbn = isbn;
     }
 

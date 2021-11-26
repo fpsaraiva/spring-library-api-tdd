@@ -3,7 +3,7 @@ package dev.fpsaraiva.libraryapi.api.resource;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.fpsaraiva.libraryapi.api.dto.BookDTORequest;
 import dev.fpsaraiva.libraryapi.exception.BusinessException;
-import dev.fpsaraiva.libraryapi.model.Book;
+import dev.fpsaraiva.libraryapi.model.entity.Book;
 import dev.fpsaraiva.libraryapi.service.BookService;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
-@WebMvcTest
+@WebMvcTest(controllers = BookController.class)
 @AutoConfigureMockMvc
 public class BookControllerTest {
 
