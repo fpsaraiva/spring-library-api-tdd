@@ -56,6 +56,10 @@ public class Loan {
         return customer;
     }
 
+    public String getCustomerEmail() {
+        return customerEmail;
+    }
+
     public Book getBook() {
         return book;
     }
