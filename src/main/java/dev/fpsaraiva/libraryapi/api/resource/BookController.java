@@ -7,6 +7,10 @@ import dev.fpsaraiva.libraryapi.model.entity.Book;
 import dev.fpsaraiva.libraryapi.model.entity.Loan;
 import dev.fpsaraiva.libraryapi.service.BookService;
 import dev.fpsaraiva.libraryapi.service.LoanService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +25,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/books")
+@Api("Book API")
 public class BookController {
 
     private final BookService service;
@@ -34,6 +39,7 @@ public class BookController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation("Create a book")
     public BookDTOResponse create(@RequestBody @Valid BookDTORequest dto) {
         Book entity = dto.toEntity();
         entity = service.save(entity);
@@ -41,6 +47,7 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
+    @ApiOperation("Obtains details of a book from its ID")
     public BookDTOResponse get(@PathVariable Long id) {
         try {
             Book entity = service.getById(id).get();
@@ -52,6 +59,10 @@ public class BookController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiOperation("Delete a book")
+    @ApiResponses({
+            @ApiResponse(code = 204, message = "Book deleted with success")
+    })
     public void delete(@PathVariable Long id) {
         try {
             Book entity = service.getById(id).get();
@@ -62,6 +73,7 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
+    @ApiOperation("Update a book")
     public BookDTOResponse update(@PathVariable Long id, BookDTORequest dto) {
         try {
             Book entity = service.getById(id).get();
@@ -75,6 +87,7 @@ public class BookController {
     }
 
     @GetMapping
+    @ApiOperation("Find books by params")
     public Page<BookDTOResponse> find(BookDTOResponse dto, Pageable pageable) {
         Book filter = new Book(dto.getId(), dto.getTitle(), dto.getAuthor(), dto.getIsbn());
         Page<Book> result = service.find(filter, pageable);
@@ -85,6 +98,7 @@ public class BookController {
     }
 
     @GetMapping("/{id}/loans")
+
     public Page<LoanDTO> loansByBook(@PathVariable Long id, Pageable pageable) {
         Book book = service.getById(id).orElseThrow( () ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND));
