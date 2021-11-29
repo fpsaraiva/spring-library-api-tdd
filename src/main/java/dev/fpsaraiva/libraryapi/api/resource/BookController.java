@@ -11,6 +11,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -32,6 +34,8 @@ public class BookController {
 
     private final LoanService loanService;
 
+    private final Logger log = LoggerFactory.getLogger(BookController.class);
+
     public BookController(BookService service, LoanService loanService) {
         this.service = service;
         this.loanService = loanService;
@@ -41,6 +45,7 @@ public class BookController {
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation("Create a book")
     public BookDTOResponse create(@RequestBody @Valid BookDTORequest dto) {
+        log.info("Creating a book for ISBN: {} ", dto.getIsbn());
         Book entity = dto.toEntity();
         entity = service.save(entity);
         return new BookDTOResponse(entity.getId(), entity.getTitle(), entity.getAuthor(), entity.getIsbn());
@@ -49,6 +54,7 @@ public class BookController {
     @GetMapping("/{id}")
     @ApiOperation("Obtains details of a book from its ID")
     public BookDTOResponse get(@PathVariable Long id) {
+        log.info("Obtaining details for book id: {} ", id);
         try {
             Book entity = service.getById(id).get();
             return new BookDTOResponse(entity.getId(), entity.getTitle(), entity.getAuthor(), entity.getIsbn());
@@ -64,6 +70,7 @@ public class BookController {
             @ApiResponse(code = 204, message = "Book deleted with success")
     })
     public void delete(@PathVariable Long id) {
+        log.info("Deleting book with id: {} ", id);
         try {
             Book entity = service.getById(id).get();
             service.delete(entity);
@@ -75,6 +82,7 @@ public class BookController {
     @PutMapping("/{id}")
     @ApiOperation("Update a book")
     public BookDTOResponse update(@PathVariable Long id, BookDTORequest dto) {
+        log.info("Updating book with id: {} ", id);
         try {
             Book entity = service.getById(id).get();
             entity.setTitle(dto.getTitle());
@@ -89,6 +97,7 @@ public class BookController {
     @GetMapping
     @ApiOperation("Find books by params")
     public Page<BookDTOResponse> find(BookDTOResponse dto, Pageable pageable) {
+        log.info("Listing all books available.");
         Book filter = new Book(dto.getId(), dto.getTitle(), dto.getAuthor(), dto.getIsbn());
         Page<Book> result = service.find(filter, pageable);
         List<BookDTOResponse> list = result.getContent().stream()
@@ -98,7 +107,6 @@ public class BookController {
     }
 
     @GetMapping("/{id}/loans")
-
     public Page<LoanDTO> loansByBook(@PathVariable Long id, Pageable pageable) {
         Book book = service.getById(id).orElseThrow( () ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -111,7 +119,6 @@ public class BookController {
                     return new LoanDTO(loanBook.getIsbn(), loan.getCustomer(), bookDTO);
                 })
                 .collect(Collectors.toList());
-
         return new PageImpl<LoanDTO>(list, pageable, result.getTotalElements());
     }
 }
